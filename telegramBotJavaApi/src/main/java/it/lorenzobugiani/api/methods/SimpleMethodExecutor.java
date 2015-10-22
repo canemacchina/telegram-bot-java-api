@@ -234,22 +234,18 @@ public class SimpleMethodExecutor extends MethodExecutor {
 
     GetMeMethod req = new GetMeMethod();
     User ret1 = req.executeMethod(executor);
-    System.out.println("AppEngineRequestExecutor.main() " + ret1);
 
     GetUserProfilePhotosMethod req2 = new GetUserProfilePhotosMethod.Builder(43889768).setLimit(100).setOffset(0).build();
     UserProfilePhotos ret2 = req2.executeMethod(executor);
-    System.out.println("AppEngineRequestExecutor.main() " + ret2);
 
     ReplyMarkup m = new ReplyKeyboardMarkup.Builder().row("A", "B").row("B", "C").setOneTimeKeyboard().build();
     SendPhotoMethod req3 = new SendPhotoMethod.Builder(43889768, new File(SimpleMethodExecutor.class.getClassLoader().getResource("img.jpg").getFile())).setReplyMarkup(m).build();
     Message ret3 = req3.executeMethod(executor);
-    // System.out.println("AppEngineRequestExecutor.main() " + ret3);
 
     // testo con faccina
     // https://github.com/vdurmont/emoji-java
     SendMessageMethod req4 = new SendMessageMethod.Builder(43889768, "testo di prova " + EmojiManager.getForAlias("+1").getUnicode()).build();
     Message ret4 = req4.executeMethod(executor);
-    System.out.println("AppEngineRequestExecutor.main() " + ret4);
   }
 
 }
