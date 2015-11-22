@@ -6,15 +6,21 @@ import it.lorenzobugiani.api.entities.Message;
 import it.lorenzobugiani.api.entities.ReplyMarkup;
 import it.lorenzobugiani.api.methods.MultipartMethod;
 
-public class SendPhotoMethod extends MultipartMethod<Message> {
+public class SendAudioMethod extends MultipartMethod<Message> {
 
-  private File photo;
+  private File audio;
 
-  private SendPhotoMethod(SendPhotoMethod.Builder builder) {
+  private SendAudioMethod(SendAudioMethod.Builder builder) {
     super();
     parameters.put("chat_id", String.valueOf(builder.chatId));
-    if (!"".equals(builder.caption)) {
-      parameters.put("caption", String.valueOf(builder.caption));
+    if (builder.duration > 0) {
+      parameters.put("duration", String.valueOf(builder.duration));
+    }
+    if (!"".equals(builder.performer)) {
+      parameters.put("performer", String.valueOf(builder.performer));
+    }
+    if (!"".equals(builder.title)) {
+      parameters.put("title", String.valueOf(builder.title));
     }
     if (builder.replyToMessageId > 0) {
       parameters.put("reply_to_message_id", String.valueOf(builder.replyToMessageId));
@@ -22,7 +28,7 @@ public class SendPhotoMethod extends MultipartMethod<Message> {
     if (!"".equals(builder.replyMarkup)) {
       parameters.put("reply_markup", String.valueOf(builder.replyMarkup));
     }
-    this.photo = builder.photo;
+    this.audio = builder.audio;
   }
 
   @Override
@@ -32,37 +38,47 @@ public class SendPhotoMethod extends MultipartMethod<Message> {
 
   @Override
   public String getMethodName() {
-    return "sendPhoto";
+    return "sendAudio";
   }
 
   @Override
   public File getAttachment() {
-    return photo;
+    return this.audio;
   }
 
   @Override
   public String getAttachmentName() {
-    return "photo";
+    return "audio";
   }
 
   public static class Builder {
 
     private int chatId;
-    private File photo;
-    private String caption;
+    private File audio;
+    private int duration;
+    private String performer;
+    private String title;
     private int replyToMessageId;
     private String replyMarkup;
 
-    public Builder(int chatId, File photo) {
+    public Builder(int chatId, File audio) {
       this.chatId = chatId;
-      this.photo = photo;
-      this.caption = "";
-      this.replyToMessageId = -1;
+      this.audio = audio;
       this.replyMarkup = "";
     }
 
-    public Builder setCaption(String caption) {
-      this.caption = caption == null ? "" : caption;
+    public Builder setDuration(int duration) {
+      this.duration = duration;
+      return this;
+    }
+
+    public Builder setPerformer(String performer) {
+      this.performer = performer;
+      return this;
+    }
+
+    public Builder setTitle(String title) {
+      this.title = title;
       return this;
     }
 
@@ -76,10 +92,8 @@ public class SendPhotoMethod extends MultipartMethod<Message> {
       return this;
     }
 
-    public SendPhotoMethod build() {
-      return new SendPhotoMethod(this);
+    public SendAudioMethod build() {
+      return new SendAudioMethod(this);
     }
-
   }
-
 }

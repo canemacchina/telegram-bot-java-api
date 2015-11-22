@@ -4,16 +4,13 @@ import it.lorenzobugiani.api.entities.Message;
 import it.lorenzobugiani.api.entities.ReplyMarkup;
 import it.lorenzobugiani.api.methods.PostMethod;
 
-public class SendMessageMethod extends PostMethod<Message> {
+public class SendLocationMethod extends PostMethod<Message> {
 
-  private SendMessageMethod(SendMessageMethod.Builder builder) {
+  private SendLocationMethod(SendLocationMethod.Builder builder) {
     super();
     parameters.put("chat_id", String.valueOf(builder.chatId));
-    parameters.put("text", String.valueOf(builder.text));
-    parameters.put("disable_web_page_preview", String.valueOf(builder.disableWebPagePreview));
-    if (!"".equals(builder.parseMode)) {
-      parameters.put("parse_mode", String.valueOf(builder.parseMode));
-    }
+    parameters.put("latitude", String.valueOf(builder.latitude));
+    parameters.put("longitude", String.valueOf(builder.longitude));
     if (builder.replyToMessageId > 0) {
       parameters.put("reply_to_message_id", String.valueOf(builder.replyToMessageId));
     }
@@ -29,34 +26,22 @@ public class SendMessageMethod extends PostMethod<Message> {
 
   @Override
   public String getMethodName() {
-    return "sendMessage";
+    return "sendLocation";
   }
 
   public static class Builder {
 
     private int chatId;
-    private String text;
-    private String parseMode;
-    private boolean disableWebPagePreview;
+    private float latitude;
+    private float longitude;
     private int replyToMessageId;
     private String replyMarkup;
 
-    public Builder(int chatId, String text) {
+    public Builder(int chatId, float latitude, float longitude) {
       this.chatId = chatId;
-      this.text = text;
-      this.disableWebPagePreview = false;
-      this.parseMode = "";
+      this.latitude = latitude;
+      this.longitude = longitude;
       this.replyMarkup = "";
-    }
-
-    public Builder setParseMode() {
-      this.parseMode = "Markdown";
-      return this;
-    }
-
-    public Builder setDisableWebPagePreview(boolean disableWebPagePreview) {
-      this.disableWebPagePreview = disableWebPagePreview;
-      return this;
     }
 
     public Builder setReplyToMessageId(int replyToMessageId) {
@@ -69,11 +54,9 @@ public class SendMessageMethod extends PostMethod<Message> {
       return this;
     }
 
-    public SendMessageMethod build() {
-      return new SendMessageMethod(this);
+    public SendLocationMethod build() {
+      return new SendLocationMethod(this);
     }
-
   }
-
 
 }

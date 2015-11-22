@@ -1,27 +1,17 @@
 package it.lorenzobugiani.api.methods.impl;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import it.lorenzobugiani.api.entities.UserProfilePhotos;
 import it.lorenzobugiani.api.methods.PostMethod;
 
 public class GetUserProfilePhotosMethod extends PostMethod<UserProfilePhotos> {
 
-  private Map<String, String> parameters;
-
   private GetUserProfilePhotosMethod(GetUserProfilePhotosMethod.Builder builder) {
-    this.parameters = new HashMap<>();
+    super();
     parameters.put("user_id", String.valueOf(builder.userId));
     if (builder.offset > 0) {
       parameters.put("offset", String.valueOf(builder.offset));
     }
     parameters.put("limit", String.valueOf(builder.limit));
-  }
-
-  @Override
-  public Map<String, String> getParameters() {
-    return parameters;
   }
 
   @Override
@@ -37,11 +27,13 @@ public class GetUserProfilePhotosMethod extends PostMethod<UserProfilePhotos> {
   public static class Builder {
 
     private int userId;
-    private int offset = -1;
-    private int limit = 100;
+    private int offset;
+    private int limit;
 
     public Builder(int user_id) {
       this.userId = user_id;
+      this.offset = -1;
+      this.limit = 100;
     }
 
     public Builder setOffset(int offset) {

@@ -2,7 +2,7 @@ package it.lorenzobugiani.api.methods;
 
 import java.io.File;
 
-public abstract class MultipartMethod<T> implements Method<T> {
+public abstract class MultipartMethod<T> extends AbstractMethod<T> {
 
   @Override
   public T executeMethod(MethodExecutor executor) {

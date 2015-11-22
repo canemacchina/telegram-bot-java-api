@@ -1,6 +1,6 @@
 package it.lorenzobugiani.api.methods;
 
-public abstract class GetMethod<T> implements Method<T> {
+public abstract class GetMethod<T> extends AbstractMethod<T> {
 
   @Override
   public T executeMethod(MethodExecutor executor) {

@@ -43,7 +43,7 @@ public class SimpleMethodExecutor extends MethodExecutor {
     try {
       String urlString = this.generateUrlEndpoint(req.getMethodName());
       Map<String, String> param = req.getParameters();
-      if (param != null) {
+      if (param != null && !param.isEmpty()) {
         urlString += "?" + this.createQueryString(param);
       }
       URL url = new URL(urlString);
@@ -85,7 +85,7 @@ public class SimpleMethodExecutor extends MethodExecutor {
       HttpURLConnection connection = (HttpURLConnection) url.openConnection();
       connection.setRequestMethod("POST");
       Map<String, String> param = req.getParameters();
-      if (param != null) {
+      if (param != null && !param.isEmpty()) {
         String paramSerialized = new Gson().toJson(param);
         connection.setRequestProperty("Content-length", String.valueOf(paramSerialized.length()));
         connection.setRequestProperty("Content-Type", "application/json");
