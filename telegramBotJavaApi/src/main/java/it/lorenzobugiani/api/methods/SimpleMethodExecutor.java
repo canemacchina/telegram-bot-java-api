@@ -41,17 +41,17 @@ public class SimpleMethodExecutor extends MethodExecutor {
   }
 
   @Override
-  public <T> T executeRequest(GetMethod<T> req) {
+  public <T> T executeRequest(GetMethod<T> method) {
     try {
-      String urlString = this.generateUrlEndpoint(req.getMethodName());
-      Map<String, String> param = req.getParameters();
+      String urlString = this.generateUrlEndpoint(method.getMethodName());
+      Map<String, String> param = method.getParameters();
       if (param != null && !param.isEmpty()) {
         urlString += "?" + this.createQueryString(param);
       }
       URL url = new URL(urlString);
       HttpURLConnection connection = (HttpURLConnection) url.openConnection();
       connection.setRequestMethod("GET");
-      T resp = parseResponse(connection, req.getReturnType());
+      T resp = parseResponse(connection, method.getReturnType());
       connection.disconnect();
       return resp;
     } catch (
@@ -81,12 +81,12 @@ public class SimpleMethodExecutor extends MethodExecutor {
   }
 
   @Override
-  public <T> T executeRequest(PostMethod<T> req) {
+  public <T> T executeRequest(PostMethod<T> method) {
     try {
-      URL url = new URL(this.generateUrlEndpoint(req.getMethodName()));
+      URL url = new URL(this.generateUrlEndpoint(method.getMethodName()));
       HttpURLConnection connection = (HttpURLConnection) url.openConnection();
       connection.setRequestMethod("POST");
-      Map<String, String> param = req.getParameters();
+      Map<String, String> param = method.getParameters();
       if (param != null && !param.isEmpty()) {
         String paramSerialized = new Gson().toJson(param);
         connection.setRequestProperty("Content-length", String.valueOf(paramSerialized.length()));
@@ -97,7 +97,7 @@ public class SimpleMethodExecutor extends MethodExecutor {
         writer.write(paramSerialized);
         writer.close();
       }
-      T resp = parseResponse(connection, req.getReturnType());
+      T resp = parseResponse(connection, method.getReturnType());
       connection.disconnect();
       return resp;
     } catch (MalformedURLException e) {
@@ -114,16 +114,18 @@ public class SimpleMethodExecutor extends MethodExecutor {
   }
 
   @Override
-  public <T> T executeRequest(MultipartMethod<T> req) {
+  public <T> T executeRequest(MultipartMethod<T> method) {
     try {
-      MultipartUtility multipart = new MultipartUtility(this.generateUrlEndpoint(req.getMethodName()));
-      Map<String, String> param = req.getParameters();
+      MultipartUtility multipart = new MultipartUtility(this.generateUrlEndpoint(method.getMethodName()));
+      Map<String, String> param = method.getParameters();
       for (Map.Entry<String, String> entry : param.entrySet()) {
         multipart.addFormField(entry.getKey(), entry.getValue());
       }
-      multipart.addFilePart(req.getAttachmentName(), req.getAttachment());
+      if (method.getAttachment() != null) {
+        multipart.addFilePart(method.getAttachmentName(), method.getAttachment());
+      }
       HttpURLConnection connection = multipart.finish();
-      T resp = parseResponse(connection, req.getReturnType());
+      T resp = parseResponse(connection, method.getReturnType());
       connection.disconnect();
       return resp;
     } catch (IOException e) {

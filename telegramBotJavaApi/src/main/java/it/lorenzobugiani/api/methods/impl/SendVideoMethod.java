@@ -7,10 +7,10 @@ import it.lorenzobugiani.api.entities.Message;
 import it.lorenzobugiani.api.entities.ReplyMarkup;
 import it.lorenzobugiani.api.methods.MultipartMethod;
 
-public class SendVideoMessage extends MultipartMethod<Message> {
+public class SendVideoMethod extends MultipartMethod<Message> {
   private VideoFile video;
 
-  private SendVideoMessage(SendVideoMessage.Builder builder) {
+  private SendVideoMethod(SendVideoMethod.Builder builder) {
     super();
     parameters.put("chat_id", String.valueOf(builder.chatId));
     if (builder.duration > 0) {
@@ -25,7 +25,11 @@ public class SendVideoMessage extends MultipartMethod<Message> {
     if (!"".equals(builder.replyMarkup)) {
       parameters.put("reply_markup", String.valueOf(builder.replyMarkup));
     }
-    this.video = builder.video;
+    if (builder.video == null) {
+      parameters.put("video", String.valueOf(builder.videoId));
+    } else {
+      this.video = builder.video;
+    }
   }
 
   @Override
@@ -40,7 +44,7 @@ public class SendVideoMessage extends MultipartMethod<Message> {
 
   @Override
   public File getAttachment() {
-    return this.video.getFile();
+    return this.video == null ? null : this.video.getFile();
   }
 
   @Override
@@ -52,15 +56,27 @@ public class SendVideoMessage extends MultipartMethod<Message> {
 
     private int chatId;
     private VideoFile video;
+    private String videoId;
     private int duration;
     private String caption;
     private int replyToMessageId;
     private String replyMarkup;
 
     public Builder(int chatId, VideoFile video) {
-      this.chatId = chatId;
+      this(chatId);
       this.video = video;
+    }
+
+    public Builder(int chatId, String videoId) {
+      this(chatId);
+      this.videoId = videoId;
+    }
+
+    private Builder(int chatId) {
+      this.chatId = chatId;
+      this.duration = -1;
       this.caption = "";
+      this.replyToMessageId = -1;
       this.replyMarkup = "";
     }
 
@@ -84,8 +100,8 @@ public class SendVideoMessage extends MultipartMethod<Message> {
       return this;
     }
 
-    public SendVideoMessage build() {
-      return new SendVideoMessage(this);
+    public SendVideoMethod build() {
+      return new SendVideoMethod(this);
     }
   }
 

@@ -20,7 +20,11 @@ public class SendStickerMethod extends MultipartMethod<Message> {
     if (!"".equals(builder.replyMarkup)) {
       parameters.put("reply_markup", String.valueOf(builder.replyMarkup));
     }
-    this.sticker = builder.sticker;
+    if (builder.sticker == null) {
+      parameters.put("sticker", String.valueOf(builder.stickerId));
+    } else {
+      this.sticker = builder.sticker;
+    }
   }
 
   @Override
@@ -35,7 +39,7 @@ public class SendStickerMethod extends MultipartMethod<Message> {
 
   @Override
   public File getAttachment() {
-    return this.sticker.getFile();
+    return this.sticker == null ? null : this.sticker.getFile();
   }
 
   @Override
@@ -47,12 +51,23 @@ public class SendStickerMethod extends MultipartMethod<Message> {
 
     private int chatId;
     private StikerFile sticker;
+    private String stickerId;
     private int replyToMessageId;
     private String replyMarkup;
 
     public Builder(int chatId, StikerFile sticker) {
-      this.chatId = chatId;
+      this(chatId);
       this.sticker = sticker;
+    }
+
+    public Builder(int chatId, String stickerId) {
+      this(chatId);
+      this.stickerId = stickerId;
+    }
+
+    private Builder(int chatId) {
+      this.chatId = chatId;
+      this.replyToMessageId = -1;
       this.replyMarkup = "";
     }
 

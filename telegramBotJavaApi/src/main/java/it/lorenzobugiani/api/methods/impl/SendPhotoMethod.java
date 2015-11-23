@@ -23,7 +23,11 @@ public class SendPhotoMethod extends MultipartMethod<Message> {
     if (!"".equals(builder.replyMarkup)) {
       parameters.put("reply_markup", String.valueOf(builder.replyMarkup));
     }
-    this.photo = builder.photo;
+    if (builder.photo == null) {
+      parameters.put("photo", String.valueOf(builder.photoId));
+    } else {
+      this.photo = builder.photo;
+    }
   }
 
   @Override
@@ -38,7 +42,7 @@ public class SendPhotoMethod extends MultipartMethod<Message> {
 
   @Override
   public File getAttachment() {
-    return photo.getFile();
+    return photo == null ? null : photo.getFile();
   }
 
   @Override
@@ -50,13 +54,23 @@ public class SendPhotoMethod extends MultipartMethod<Message> {
 
     private int chatId;
     private PhotoFile photo;
+    private String photoId;
     private String caption;
     private int replyToMessageId;
     private String replyMarkup;
 
     public Builder(int chatId, PhotoFile photo) {
-      this.chatId = chatId;
+      this(chatId);
       this.photo = photo;
+    }
+
+    public Builder(int chatId, String photoId) {
+      this(chatId);
+      this.photoId = photoId;
+    }
+
+    private Builder(int chatId) {
+      this.chatId = chatId;
       this.caption = "";
       this.replyToMessageId = -1;
       this.replyMarkup = "";

@@ -29,7 +29,11 @@ public class SendAudioMethod extends MultipartMethod<Message> {
     if (!"".equals(builder.replyMarkup)) {
       parameters.put("reply_markup", String.valueOf(builder.replyMarkup));
     }
-    this.audio = builder.audio;
+    if (builder.audio == null) {
+      parameters.put("audio", String.valueOf(builder.audioId));
+    } else {
+      this.audio = builder.audio;
+    }
   }
 
   @Override
@@ -44,7 +48,7 @@ public class SendAudioMethod extends MultipartMethod<Message> {
 
   @Override
   public File getAttachment() {
-    return this.audio.getFile();
+    return audio == null ? null : audio.getFile();
   }
 
   @Override
@@ -56,6 +60,7 @@ public class SendAudioMethod extends MultipartMethod<Message> {
 
     private int chatId;
     private Mp3File audio;
+    private String audioId;
     private int duration;
     private String performer;
     private String title;
@@ -63,8 +68,21 @@ public class SendAudioMethod extends MultipartMethod<Message> {
     private String replyMarkup;
 
     public Builder(int chatId, Mp3File audio) {
-      this.chatId = chatId;
+      this(chatId);
       this.audio = audio;
+    }
+
+    public Builder(int chatId, String audioId) {
+      this(chatId);
+      this.audioId = audioId;
+    }
+
+    private Builder(int chatId) {
+      this.chatId = chatId;
+      this.duration = -1;
+      this.performer = "";
+      this.title = "";
+      this.replyToMessageId = -1;
       this.replyMarkup = "";
     }
 

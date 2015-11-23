@@ -20,7 +20,11 @@ public class SendDocumentMethod extends MultipartMethod<Message> {
     if (!"".equals(builder.replyMarkup)) {
       parameters.put("reply_markup", String.valueOf(builder.replyMarkup));
     }
-    this.document = builder.document;
+    if (builder.document == null) {
+      parameters.put("document", String.valueOf(builder.documentId));
+    } else {
+      this.document = builder.document;
+    }
   }
 
   @Override
@@ -35,7 +39,7 @@ public class SendDocumentMethod extends MultipartMethod<Message> {
 
   @Override
   public File getAttachment() {
-    return this.document.getFile();
+    return this.document == null ? null : this.document.getFile();
   }
 
   @Override
@@ -47,12 +51,23 @@ public class SendDocumentMethod extends MultipartMethod<Message> {
 
     private int chatId;
     private DocumentFile document;
+    private String documentId;
     private int replyToMessageId;
     private String replyMarkup;
 
     public Builder(int chatId, DocumentFile document) {
-      this.chatId = chatId;
+      this(chatId);
       this.document = document;
+    }
+
+    public Builder(int chatId, String documentId) {
+      this(chatId);
+      this.documentId = documentId;
+    }
+
+    private Builder(int chatId) {
+      this.chatId = chatId;
+      this.replyToMessageId = -1;
       this.replyMarkup = "";
     }
 
