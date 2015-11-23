@@ -2,12 +2,13 @@ package it.lorenzobugiani.api.methods.impl;
 
 import java.io.File;
 
+import it.lorenzobugiani.api.Files.VideoFile;
 import it.lorenzobugiani.api.entities.Message;
 import it.lorenzobugiani.api.entities.ReplyMarkup;
 import it.lorenzobugiani.api.methods.MultipartMethod;
 
 public class SendVideoMessage extends MultipartMethod<Message> {
-  private File video;
+  private VideoFile video;
 
   private SendVideoMessage(SendVideoMessage.Builder builder) {
     super();
@@ -39,7 +40,7 @@ public class SendVideoMessage extends MultipartMethod<Message> {
 
   @Override
   public File getAttachment() {
-    return this.video;
+    return this.video.getFile();
   }
 
   @Override
@@ -50,13 +51,13 @@ public class SendVideoMessage extends MultipartMethod<Message> {
   public static class Builder {
 
     private int chatId;
-    private File video;
+    private VideoFile video;
     private int duration;
     private String caption;
     private int replyToMessageId;
     private String replyMarkup;
 
-    public Builder(int chatId, File video) {
+    public Builder(int chatId, VideoFile video) {
       this.chatId = chatId;
       this.video = video;
       this.caption = "";

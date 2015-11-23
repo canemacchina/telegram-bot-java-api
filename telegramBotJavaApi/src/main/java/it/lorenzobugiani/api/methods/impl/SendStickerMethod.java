@@ -2,13 +2,14 @@ package it.lorenzobugiani.api.methods.impl;
 
 import java.io.File;
 
+import it.lorenzobugiani.api.Files.StikerFile;
 import it.lorenzobugiani.api.entities.Message;
 import it.lorenzobugiani.api.entities.ReplyMarkup;
 import it.lorenzobugiani.api.methods.MultipartMethod;
 
 public class SendStickerMethod extends MultipartMethod<Message> {
 
-  private File sticker;
+  private StikerFile sticker;
 
   private SendStickerMethod(SendStickerMethod.Builder builder) {
     super();
@@ -34,7 +35,7 @@ public class SendStickerMethod extends MultipartMethod<Message> {
 
   @Override
   public File getAttachment() {
-    return this.sticker;
+    return this.sticker.getFile();
   }
 
   @Override
@@ -45,11 +46,11 @@ public class SendStickerMethod extends MultipartMethod<Message> {
   public static class Builder {
 
     private int chatId;
-    private File sticker;
+    private StikerFile sticker;
     private int replyToMessageId;
     private String replyMarkup;
 
-    public Builder(int chatId, File sticker) {
+    public Builder(int chatId, StikerFile sticker) {
       this.chatId = chatId;
       this.sticker = sticker;
       this.replyMarkup = "";

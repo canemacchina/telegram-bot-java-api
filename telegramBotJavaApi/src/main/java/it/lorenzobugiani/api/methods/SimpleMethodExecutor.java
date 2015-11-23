@@ -21,11 +21,13 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.vdurmont.emoji.EmojiManager;
 
+import it.lorenzobugiani.api.Files.PhotoFile;
 import it.lorenzobugiani.api.entities.Message;
 import it.lorenzobugiani.api.entities.ReplyKeyboardMarkup;
 import it.lorenzobugiani.api.entities.ReplyMarkup;
 import it.lorenzobugiani.api.entities.User;
 import it.lorenzobugiani.api.entities.UserProfilePhotos;
+import it.lorenzobugiani.api.exceptions.InvalidFileException;
 import it.lorenzobugiani.api.exceptions.RequestException;
 import it.lorenzobugiani.api.methods.impl.GetMeMethod;
 import it.lorenzobugiani.api.methods.impl.GetUserProfilePhotosMethod;
@@ -229,7 +231,7 @@ public class SimpleMethodExecutor extends MethodExecutor {
     }
   }
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws InvalidFileException, IOException {
     MethodExecutor executor = new SimpleMethodExecutor("159614546:AAF-XwSgLNkfnH_PeIsUm0iNF9xqDVxTuS8");
 
     GetMeMethod req = new GetMeMethod();
@@ -239,7 +241,7 @@ public class SimpleMethodExecutor extends MethodExecutor {
     UserProfilePhotos ret2 = req2.executeMethod(executor);
 
     ReplyMarkup m = new ReplyKeyboardMarkup.Builder().row("A", "B").row("B", "C").setOneTimeKeyboard().build();
-    SendPhotoMethod req3 = new SendPhotoMethod.Builder(43889768, new File(SimpleMethodExecutor.class.getClassLoader().getResource("img.jpg").getFile())).setReplyMarkup(m).build();
+    SendPhotoMethod req3 = new SendPhotoMethod.Builder(43889768, new PhotoFile(new File(SimpleMethodExecutor.class.getClassLoader().getResource("img.jpg").getFile()))).setReplyMarkup(m).build();
     Message ret3 = req3.executeMethod(executor);
 
     // testo con faccina

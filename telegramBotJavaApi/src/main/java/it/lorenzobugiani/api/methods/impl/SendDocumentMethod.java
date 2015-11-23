@@ -2,13 +2,14 @@ package it.lorenzobugiani.api.methods.impl;
 
 import java.io.File;
 
+import it.lorenzobugiani.api.Files.DocumentFile;
 import it.lorenzobugiani.api.entities.Message;
 import it.lorenzobugiani.api.entities.ReplyMarkup;
 import it.lorenzobugiani.api.methods.MultipartMethod;
 
 public class SendDocumentMethod extends MultipartMethod<Message> {
 
-  private File document;
+  private DocumentFile document;
 
   private SendDocumentMethod(SendDocumentMethod.Builder builder) {
     super();
@@ -34,7 +35,7 @@ public class SendDocumentMethod extends MultipartMethod<Message> {
 
   @Override
   public File getAttachment() {
-    return this.document;
+    return this.document.getFile();
   }
 
   @Override
@@ -45,11 +46,11 @@ public class SendDocumentMethod extends MultipartMethod<Message> {
   public static class Builder {
 
     private int chatId;
-    private File document;
+    private DocumentFile document;
     private int replyToMessageId;
     private String replyMarkup;
 
-    public Builder(int chatId, File document) {
+    public Builder(int chatId, DocumentFile document) {
       this.chatId = chatId;
       this.document = document;
       this.replyMarkup = "";

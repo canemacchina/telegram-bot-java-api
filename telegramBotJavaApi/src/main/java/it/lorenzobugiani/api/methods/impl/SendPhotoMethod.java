@@ -2,13 +2,14 @@ package it.lorenzobugiani.api.methods.impl;
 
 import java.io.File;
 
+import it.lorenzobugiani.api.Files.PhotoFile;
 import it.lorenzobugiani.api.entities.Message;
 import it.lorenzobugiani.api.entities.ReplyMarkup;
 import it.lorenzobugiani.api.methods.MultipartMethod;
 
 public class SendPhotoMethod extends MultipartMethod<Message> {
 
-  private File photo;
+  private PhotoFile photo;
 
   private SendPhotoMethod(SendPhotoMethod.Builder builder) {
     super();
@@ -37,7 +38,7 @@ public class SendPhotoMethod extends MultipartMethod<Message> {
 
   @Override
   public File getAttachment() {
-    return photo;
+    return photo.getFile();
   }
 
   @Override
@@ -48,12 +49,12 @@ public class SendPhotoMethod extends MultipartMethod<Message> {
   public static class Builder {
 
     private int chatId;
-    private File photo;
+    private PhotoFile photo;
     private String caption;
     private int replyToMessageId;
     private String replyMarkup;
 
-    public Builder(int chatId, File photo) {
+    public Builder(int chatId, PhotoFile photo) {
       this.chatId = chatId;
       this.photo = photo;
       this.caption = "";
