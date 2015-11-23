@@ -7,7 +7,7 @@ import it.lorenzobugiani.api.exceptions.InvalidFileException;
 
 public abstract class TelegramFile {
 
-  private File file;
+  protected File file;
 
   public TelegramFile(File file) throws InvalidFileException, IOException {
     this.file = file;

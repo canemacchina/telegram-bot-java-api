@@ -2,13 +2,14 @@ package it.lorenzobugiani.api.methods.impl;
 
 import java.io.File;
 
+import it.lorenzobugiani.api.Files.Mp3File;
 import it.lorenzobugiani.api.entities.Message;
 import it.lorenzobugiani.api.entities.ReplyMarkup;
 import it.lorenzobugiani.api.methods.MultipartMethod;
 
 public class SendAudioMethod extends MultipartMethod<Message> {
 
-  private File audio;
+  private Mp3File audio;
 
   private SendAudioMethod(SendAudioMethod.Builder builder) {
     super();
@@ -43,7 +44,7 @@ public class SendAudioMethod extends MultipartMethod<Message> {
 
   @Override
   public File getAttachment() {
-    return this.audio;
+    return this.audio.getFile();
   }
 
   @Override
@@ -54,14 +55,14 @@ public class SendAudioMethod extends MultipartMethod<Message> {
   public static class Builder {
 
     private int chatId;
-    private File audio;
+    private Mp3File audio;
     private int duration;
     private String performer;
     private String title;
     private int replyToMessageId;
     private String replyMarkup;
 
-    public Builder(int chatId, File audio) {
+    public Builder(int chatId, Mp3File audio) {
       this.chatId = chatId;
       this.audio = audio;
       this.replyMarkup = "";

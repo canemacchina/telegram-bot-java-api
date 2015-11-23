@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import it.lorenzobugiani.api.exceptions.InvalidFileException;
+import it.lorenzobugiani.api.utils.FileTypeDetector;
 
 public class Mp3File extends TelegramFile {
 
@@ -15,9 +16,14 @@ public class Mp3File extends TelegramFile {
 
   @Override
   protected boolean isValid() throws IOException {
-    // FileTypeDetector typeDetector = new FileTypeDetector();
-    // String mimeType = typeDetector.probeContentType(this.getFile().toPath());
-    return false;
+    String mimeType = new FileTypeDetector().probeContentType(this.file.toPath());
+    if(!mimeType.equals("audio/mp3")){
+      return false;
+    }
+    if(this.file.length() > MAX_SIZE){
+      return false;
+    }
+    return true;
   }
-
+  
 }
