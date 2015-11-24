@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 
 import it.lorenzobugiani.api.exceptions.InvalidFileException;
-import it.lorenzobugiani.api.utils.FileTypeDetector;
 
 public class StikerFile extends TelegramFile {
 
@@ -16,10 +15,10 @@ public class StikerFile extends TelegramFile {
 
   @Override
   protected boolean isValid() throws IOException {
-    String mimeType = new FileTypeDetector().probeContentType(this.file.toPath());
-    if (!WEBP_MIME_TYPE.equals(mimeType)) {
-      return false;
-    }
+    // String mimeType = new FileTypeDetector().probeContentType(this.file.toPath());
+    // if (!WEBP_MIME_TYPE.equals(mimeType)) {
+    // return false;
+    // }
     return true;
   }
 

@@ -133,19 +133,15 @@ public class SimpleMethodExecutor extends MethodExecutor {
 
     private MultipartUtility(String requestURL) throws IOException {
 
-      // creates a unique boundary based on time stamp
       boundary = "===" + System.currentTimeMillis() + "===";
-
       URL url = new URL(requestURL);
       httpConn = (HttpURLConnection) url.openConnection();
       httpConn.setRequestMethod("POST");
-      // httpConn.setUseCaches(false);
       httpConn.setDoOutput(true);
       httpConn.setDoInput(true);
       httpConn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
       outputStream = httpConn.getOutputStream();
       writer = new PrintWriter(new OutputStreamWriter(outputStream, CHARSET), true);
-      // writer = new PrintWriter(new OutputStreamWriter(System.out, CHARSET), true);
     }
 
     public void addFormField(String name, String value) {
@@ -180,7 +176,6 @@ public class SimpleMethodExecutor extends MethodExecutor {
     }
 
     public HttpURLConnection finish() throws IOException {
-      // writer.append(LINE_FEED).flush();
       writer.append("--" + boundary + "--").append(LINE_FEED);
       writer.flush();
       writer.close();

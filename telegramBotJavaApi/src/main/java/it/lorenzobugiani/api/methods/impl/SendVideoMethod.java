@@ -8,6 +8,7 @@ import it.lorenzobugiani.api.files.VideoFile;
 import it.lorenzobugiani.api.methods.MultipartMethod;
 
 public class SendVideoMethod extends MultipartMethod<Message> {
+
   private VideoFile video;
 
   private SendVideoMethod(SendVideoMethod.Builder builder) {

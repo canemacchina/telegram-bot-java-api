@@ -18,9 +18,9 @@ public class AudioFile extends TelegramFile {
   @Override
   protected boolean isValid() throws IOException {
     String mimeType = new FileTypeDetector().probeContentType(this.file.toPath());
-    if (!OGG_MIME_TYPE.equals(mimeType)) {
-      return false;
-    }
+    // if (!OGG_MIME_TYPE.equals(mimeType)) {
+    // return false;
+    // }
     if (this.file.length() > MAX_SIZE) {
       return false;
     }
