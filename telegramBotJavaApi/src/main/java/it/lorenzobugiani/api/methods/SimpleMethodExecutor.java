@@ -12,27 +12,18 @@ import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.Map;
 
 import com.google.common.reflect.TypeParameter;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import com.vdurmont.emoji.EmojiManager;
 
 import it.lorenzobugiani.api.entities.Message;
-import it.lorenzobugiani.api.entities.ReplyKeyboardMarkup;
-import it.lorenzobugiani.api.entities.ReplyMarkup;
-import it.lorenzobugiani.api.entities.User;
-import it.lorenzobugiani.api.entities.UserProfilePhotos;
 import it.lorenzobugiani.api.exceptions.InvalidFileException;
 import it.lorenzobugiani.api.exceptions.RequestException;
-import it.lorenzobugiani.api.files.PhotoFile;
-import it.lorenzobugiani.api.methods.impl.GetMeMethod;
-import it.lorenzobugiani.api.methods.impl.GetUserProfilePhotosMethod;
-import it.lorenzobugiani.api.methods.impl.SendMessageMethod;
 import it.lorenzobugiani.api.methods.impl.SendPhotoMethod;
+import it.lorenzobugiani.api.utils.FileTypeDetector;
 
 public class SimpleMethodExecutor extends MethodExecutor {
 
@@ -54,25 +45,13 @@ public class SimpleMethodExecutor extends MethodExecutor {
       T resp = parseResponse(connection, method.getReturnType());
       connection.disconnect();
       return resp;
-    } catch (
-
-    MalformedURLException e)
-
-    {
+    } catch (MalformedURLException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
-    } catch (
-
-    IOException e)
-
-    {
+    } catch (IOException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
-    } catch (
-
-    RequestException e)
-
-    {
+    } catch (RequestException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
@@ -192,6 +171,7 @@ public class SimpleMethodExecutor extends MethodExecutor {
       httpConn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
       outputStream = httpConn.getOutputStream();
       writer = new PrintWriter(new OutputStreamWriter(outputStream, CHARSET), true);
+      writer = new PrintWriter(new OutputStreamWriter(System.out, CHARSET), true);
     }
 
     public void addFormField(String name, String value) {
@@ -199,7 +179,7 @@ public class SimpleMethodExecutor extends MethodExecutor {
       writer.append("Content-Disposition: form-data; name=\"" + name + "\"").append(LINE_FEED);
       writer.append("Content-Type: text/plain; charset=" + CHARSET).append(LINE_FEED);
       writer.append(LINE_FEED);
-      writer.append(value).append(LINE_FEED);
+      writer.append(value.trim()).append(LINE_FEED);
       writer.flush();
     }
 
@@ -207,9 +187,9 @@ public class SimpleMethodExecutor extends MethodExecutor {
       String fileName = uploadFile.getName();
       writer.append("--" + boundary).append(LINE_FEED);
       writer.append("Content-Disposition: form-data; name=\"" + fieldName + "\"; filename=\"" + fileName + "\"").append(LINE_FEED);
-      writer.append("Content-Type: " + URLConnection.guessContentTypeFromName(fileName)).append(LINE_FEED);
+      writer.append("Content-Type: " + new FileTypeDetector().probeContentType(uploadFile.toPath())).append(LINE_FEED);
       writer.append("Content-Transfer-Encoding: binary").append(LINE_FEED);
-      writer.append(LINE_FEED);
+      // writer.append(LINE_FEED);
       writer.flush();
 
       FileInputStream inputStream = new FileInputStream(uploadFile);
@@ -228,6 +208,7 @@ public class SimpleMethodExecutor extends MethodExecutor {
     public HttpURLConnection finish() throws IOException {
       writer.append(LINE_FEED).flush();
       writer.append("--" + boundary + "--").append(LINE_FEED);
+      writer.flush();
       writer.close();
       return httpConn;
     }
@@ -236,20 +217,29 @@ public class SimpleMethodExecutor extends MethodExecutor {
   public static void main(String[] args) throws InvalidFileException, IOException {
     MethodExecutor executor = new SimpleMethodExecutor("159614546:AAF-XwSgLNkfnH_PeIsUm0iNF9xqDVxTuS8");
 
-    GetMeMethod req = new GetMeMethod();
-    User ret1 = req.executeMethod(executor);
+    // GetMeMethod req = new GetMeMethod();
+    // User ret1 = req.executeMethod(executor);
+    //
+    // GetUserProfilePhotosMethod req2 = new
+    // GetUserProfilePhotosMethod.Builder(43889768).setLimit(100).setOffset(0).build();
+    // UserProfilePhotos ret2 = req2.executeMethod(executor);
+    //
+    // ReplyMarkup m = new ReplyKeyboardMarkup.Builder().row("A", "B").row("B",
+    // "C").setOneTimeKeyboard().build();
+    // SendPhotoMethod req3 = new SendPhotoMethod.Builder(43889768, new PhotoFile(new
+    // File(SimpleMethodExecutor.class.getClassLoader().getResource("img.jpg").getFile()))).setReplyMarkup(m).build();
+    // Message ret3 = req3.executeMethod(executor);
+    // String photoId = ret3.getPhoto().get(0).getFileId();
+    // System.out.println("SimpleMethodExecutor.main() " + photoId);
 
-    GetUserProfilePhotosMethod req2 = new GetUserProfilePhotosMethod.Builder(43889768).setLimit(100).setOffset(0).build();
-    UserProfilePhotos ret2 = req2.executeMethod(executor);
-
-    ReplyMarkup m = new ReplyKeyboardMarkup.Builder().row("A", "B").row("B", "C").setOneTimeKeyboard().build();
-    SendPhotoMethod req3 = new SendPhotoMethod.Builder(43889768, new PhotoFile(new File(SimpleMethodExecutor.class.getClassLoader().getResource("img.jpg").getFile()))).setReplyMarkup(m).build();
-    Message ret3 = req3.executeMethod(executor);
+    SendPhotoMethod req4 = new SendPhotoMethod.Builder(43889768, "AgADBAAD5acxG1KGgwkrsCV14q8moANFojAABK4GdHHXe7PySjYAAgI").build();
+    Message ret4 = req4.executeMethod(executor);
 
     // testo con faccina
     // https://github.com/vdurmont/emoji-java
-    SendMessageMethod req4 = new SendMessageMethod.Builder(43889768, "testo di prova " + EmojiManager.getForAlias("+1").getUnicode()).build();
-    Message ret4 = req4.executeMethod(executor);
+    // SendMessageMethod req5 = new SendMessageMethod.Builder(43889768, "testo di prova " +
+    // EmojiManager.getForAlias("+1").getUnicode()).build();
+    // Message ret5 = req5.executeMethod(executor);
   }
 
 }
