@@ -18,20 +18,8 @@ import com.google.common.reflect.TypeParameter;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import com.vdurmont.emoji.EmojiManager;
 
-import it.lorenzobugiani.api.entities.Message;
-import it.lorenzobugiani.api.entities.ReplyKeyboardMarkup;
-import it.lorenzobugiani.api.entities.ReplyMarkup;
-import it.lorenzobugiani.api.entities.User;
-import it.lorenzobugiani.api.entities.UserProfilePhotos;
-import it.lorenzobugiani.api.exceptions.InvalidFileException;
 import it.lorenzobugiani.api.exceptions.RequestException;
-import it.lorenzobugiani.api.files.PhotoFile;
-import it.lorenzobugiani.api.methods.impl.GetMeMethod;
-import it.lorenzobugiani.api.methods.impl.GetUserProfilePhotosMethod;
-import it.lorenzobugiani.api.methods.impl.SendMessageMethod;
-import it.lorenzobugiani.api.methods.impl.SendPhotoMethod;
 import it.lorenzobugiani.api.utils.FileTypeDetector;
 
 public class SimpleMethodExecutor extends MethodExecutor {
@@ -222,28 +210,4 @@ public class SimpleMethodExecutor extends MethodExecutor {
       return httpConn;
     }
   }
-
-  public static void main(String[] args) throws InvalidFileException, IOException {
-    MethodExecutor executor = new SimpleMethodExecutor("Your-token-here");
-
-    GetMeMethod req = new GetMeMethod();
-    User ret1 = req.executeMethod(executor);
-
-    GetUserProfilePhotosMethod req2 = new GetUserProfilePhotosMethod.Builder(43889768).setLimit(100).setOffset(0).build();
-    UserProfilePhotos ret2 = req2.executeMethod(executor);
-
-    ReplyMarkup m = new ReplyKeyboardMarkup.Builder().row("A", "B").row("B", "C").setOneTimeKeyboard().build();
-    SendPhotoMethod req3 = new SendPhotoMethod.Builder(43889768, new PhotoFile(new File(SimpleMethodExecutor.class.getClassLoader().getResource("img.jpg").getFile()))).setReplyMarkup(m).build();
-    Message ret3 = req3.executeMethod(executor);
-    String photoId = ret3.getPhoto().get(0).getFileId();
-
-    SendPhotoMethod req4 = new SendPhotoMethod.Builder(43889768, photoId).build();
-    Message ret4 = req4.executeMethod(executor);
-
-    // testo con faccina
-    // https://github.com/vdurmont/emoji-java
-    SendMessageMethod req5 = new SendMessageMethod.Builder(43889768, "testo di prova " + EmojiManager.getForAlias("+1").getUnicode()).build();
-    Message ret5 = req5.executeMethod(executor);
-  }
-
 }
