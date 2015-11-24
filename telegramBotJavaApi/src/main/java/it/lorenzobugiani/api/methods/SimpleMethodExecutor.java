@@ -21,7 +21,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.vdurmont.emoji.EmojiManager;
 
-import it.lorenzobugiani.api.Files.PhotoFile;
 import it.lorenzobugiani.api.entities.Message;
 import it.lorenzobugiani.api.entities.ReplyKeyboardMarkup;
 import it.lorenzobugiani.api.entities.ReplyMarkup;
@@ -29,6 +28,7 @@ import it.lorenzobugiani.api.entities.User;
 import it.lorenzobugiani.api.entities.UserProfilePhotos;
 import it.lorenzobugiani.api.exceptions.InvalidFileException;
 import it.lorenzobugiani.api.exceptions.RequestException;
+import it.lorenzobugiani.api.files.PhotoFile;
 import it.lorenzobugiani.api.methods.impl.GetMeMethod;
 import it.lorenzobugiani.api.methods.impl.GetUserProfilePhotosMethod;
 import it.lorenzobugiani.api.methods.impl.SendMessageMethod;

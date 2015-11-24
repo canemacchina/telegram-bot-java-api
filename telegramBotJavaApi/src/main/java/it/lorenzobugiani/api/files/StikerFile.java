@@ -1,4 +1,4 @@
-package it.lorenzobugiani.api.Files;
+package it.lorenzobugiani.api.files;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,21 +6,23 @@ import java.io.IOException;
 import it.lorenzobugiani.api.exceptions.InvalidFileException;
 import it.lorenzobugiani.api.utils.FileTypeDetector;
 
-public class PhotoFile extends TelegramFile {
+public class StikerFile extends TelegramFile {
 
-  private static final String PHOTO_MIME_TYPE = "image";
+  private static final String WEBP_MIME_TYPE = "image/webp";
 
-  public PhotoFile(File file) throws InvalidFileException, IOException {
+  public StikerFile(File file) throws InvalidFileException, IOException {
     super(file);
   }
 
   @Override
   protected boolean isValid() throws IOException {
     String mimeType = new FileTypeDetector().probeContentType(this.file.toPath());
-    if (mimeType == null || !mimeType.contains(PHOTO_MIME_TYPE)) {
+    if (!WEBP_MIME_TYPE.equals(mimeType)) {
       return false;
     }
     return true;
   }
 
 }
+
+

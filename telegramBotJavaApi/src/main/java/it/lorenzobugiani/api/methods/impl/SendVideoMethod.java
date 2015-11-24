@@ -2,9 +2,9 @@ package it.lorenzobugiani.api.methods.impl;
 
 import java.io.File;
 
-import it.lorenzobugiani.api.Files.VideoFile;
 import it.lorenzobugiani.api.entities.Message;
 import it.lorenzobugiani.api.entities.ReplyMarkup;
+import it.lorenzobugiani.api.files.VideoFile;
 import it.lorenzobugiani.api.methods.MultipartMethod;
 
 public class SendVideoMethod extends MultipartMethod<Message> {

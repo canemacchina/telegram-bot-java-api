@@ -2,9 +2,9 @@ package it.lorenzobugiani.api.methods.impl;
 
 import java.io.File;
 
-import it.lorenzobugiani.api.Files.DocumentFile;
 import it.lorenzobugiani.api.entities.Message;
 import it.lorenzobugiani.api.entities.ReplyMarkup;
+import it.lorenzobugiani.api.files.DocumentFile;
 import it.lorenzobugiani.api.methods.MultipartMethod;
 
 public class SendDocumentMethod extends MultipartMethod<Message> {

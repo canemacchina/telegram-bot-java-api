@@ -1,4 +1,4 @@
-package it.lorenzobugiani.api.Files;
+package it.lorenzobugiani.api.files;
 
 import java.io.File;
 import java.io.IOException;
