@@ -10,7 +10,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 
@@ -29,7 +28,7 @@ public class SimpleMethodExecutor extends MethodExecutor {
   }
 
   @Override
-  public <T> T executeRequest(GetMethod<T> method) {
+  public <T> T executeRequest(GetMethod<T> method) throws RequestException {
     try {
       String urlString = this.generateUrlEndpoint(method.getMethodName());
       Map<String, String> param = method.getParameters();
@@ -42,22 +41,13 @@ public class SimpleMethodExecutor extends MethodExecutor {
       T resp = parseResponse(connection, method.getReturnType());
       connection.disconnect();
       return resp;
-    } catch (MalformedURLException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
     } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (RequestException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+      throw new RequestException(e);
     }
-    return null;
-
   }
 
   @Override
-  public <T> T executeRequest(PostMethod<T> method) {
+  public <T> T executeRequest(PostMethod<T> method) throws RequestException {
     try {
       URL url = new URL(this.generateUrlEndpoint(method.getMethodName()));
       HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -76,21 +66,13 @@ public class SimpleMethodExecutor extends MethodExecutor {
       T resp = parseResponse(connection, method.getReturnType());
       connection.disconnect();
       return resp;
-    } catch (MalformedURLException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
     } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (RequestException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+      throw new RequestException(e);
     }
-    return null;
   }
 
   @Override
-  public <T> T executeRequest(MultipartMethod<T> method) {
+  public <T> T executeRequest(MultipartMethod<T> method) throws RequestException {
     try {
       MultipartUtility multipart = new MultipartUtility(this.generateUrlEndpoint(method.getMethodName()));
       Map<String, String> param = method.getParameters();
@@ -105,13 +87,8 @@ public class SimpleMethodExecutor extends MethodExecutor {
       connection.disconnect();
       return resp;
     } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (RequestException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+      throw new RequestException(e);
     }
-    return null;
   }
 
   private String read(InputStream in) throws IOException {
