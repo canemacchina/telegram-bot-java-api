@@ -2,21 +2,23 @@ package it.lorenzobugiani.api.methods.impl;
 
 import com.google.common.base.Preconditions;
 
-import it.lorenzobugiani.api.entities.Updates;
+import it.lorenzobugiani.api.entities.Update;
 import it.lorenzobugiani.api.methods.PostMethod;
 
-public class GetupdatesMethod extends PostMethod<Updates> {
+public class GetupdatesMethod extends PostMethod<Update[]> {
 
   private GetupdatesMethod(GetupdatesMethod.Builder builder) {
     super();
-    parameters.put("offset", String.valueOf(builder.offset));
+    if (builder.offset > 0) {
+      parameters.put("offset", String.valueOf(builder.offset));
+    }
     parameters.put("limit", String.valueOf(builder.limit));
     parameters.put("timeout", String.valueOf(builder.timeout));
   }
 
   @Override
-  public Class<Updates> getReturnType() {
-    return Updates.class;
+  public Class<Update[]> getReturnType() {
+    return Update[].class;
   }
 
   @Override
@@ -30,8 +32,8 @@ public class GetupdatesMethod extends PostMethod<Updates> {
     private int limit;
     private int timeout;
 
-    public Builder(int offset) {
-      this.offset = offset;
+    public Builder() {
+      this.offset = -1;
       this.limit = 100;
       this.timeout = 0;
     }

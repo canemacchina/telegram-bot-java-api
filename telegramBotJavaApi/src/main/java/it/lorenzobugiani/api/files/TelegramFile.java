@@ -12,8 +12,9 @@ public abstract class TelegramFile {
   public TelegramFile(File file) throws InvalidFileException, IOException {
     this.file = file;
     if (!this.isValid()) {
+      String filename = file.getName();
       this.file = null;
-      throw new InvalidFileException("File is invalid. Read Telegram documentation to check file restrictions");
+      throw new InvalidFileException(this.getClass().getName() + ": File " + filename + " is invalid. Read Telegram documentation to check file restrictions");
     }
   }
 

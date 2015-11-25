@@ -4,6 +4,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Map;
 
+import it.lorenzobugiani.api.exceptions.RequestException;
+
 public abstract class MethodExecutor {
 
   private static final String API_URL = "https://api.telegram.org/bot";
@@ -13,11 +15,11 @@ public abstract class MethodExecutor {
     this.baseUrl = API_URL + token + "/";
   }
 
-  public abstract <T> T executeRequest(GetMethod<T> req);
+  public abstract <T> T executeRequest(GetMethod<T> req) throws RequestException;
 
-  public abstract <T> T executeRequest(PostMethod<T> req);
+  public abstract <T> T executeRequest(PostMethod<T> req) throws RequestException;
 
-  public abstract <T> T executeRequest(MultipartMethod<T> req);
+  public abstract <T> T executeRequest(MultipartMethod<T> req) throws RequestException;
 
   protected String generateUrlEndpoint(String methodName) {
     return this.baseUrl + methodName;

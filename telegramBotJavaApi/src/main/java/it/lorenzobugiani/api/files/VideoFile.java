@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 
 import it.lorenzobugiani.api.exceptions.InvalidFileException;
-import it.lorenzobugiani.api.utils.FileTypeDetector;
 
 public class VideoFile extends TelegramFile {
 
@@ -17,10 +16,10 @@ public class VideoFile extends TelegramFile {
 
   @Override
   protected boolean isValid() throws IOException {
-    String mimeType = new FileTypeDetector().probeContentType(this.file.toPath());
-    if (!MP4_MIME_TYPE.equals(mimeType)) {
-      return false;
-    }
+    // String mimeType = new FileTypeDetector().probeContentType(this.file.toPath());
+    // if (!MP4_MIME_TYPE.equals(mimeType)) {
+    // return false;
+    // }
     if (this.file.length() > MAX_SIZE) {
       return false;
     }

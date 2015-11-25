@@ -2,7 +2,7 @@ package it.lorenzobugiani.api.methods.impl;
 
 import it.lorenzobugiani.api.methods.PostMethod;
 
-public class SendChatActionMethod extends PostMethod<Void> {
+public class SendChatActionMethod extends PostMethod<Boolean> {
 
   public SendChatActionMethod(int chatId, Actions action) {
     super();
@@ -11,8 +11,8 @@ public class SendChatActionMethod extends PostMethod<Void> {
   }
 
   @Override
-  public Class<Void> getReturnType() {
-    return Void.class;
+  public Class<Boolean> getReturnType() {
+    return Boolean.class;
   }
 
   @Override
