@@ -28,6 +28,7 @@ Then, create the API method corresponding object and execute it!
 Method method = //... construct an API Method
 method.execute(executor);
 ```
+(Almost) Every Method have a builder to construct it. The builder accept Telegram required parameters as constructors parameters, and then expose setters for optional arguments. See Telegram official documentation for a list of required and optional parameter for every method.
 ### API Methods examples
 **getMe**
 ```java
